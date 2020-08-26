@@ -102,14 +102,17 @@ function GameManager(n) {
      * Check board for winner. 
      */
     this.getGameStatus = function () {
-        let gridSize = this.board.n;
         let n = (this.board.n * 2) + 2;
+
+        let gridSize = this.board.n;
         for (let i = 0; i < n; i++) {
-            if (this.score[i] == gridSize) return true;
+            if (this.score[i] == (-1 * gridSize)) return outcome.AI_WINS;
             if (this.score[i] == gridSize) return outcome.PLAYER_WINS;
         }
 
-        return false;
+        const allNotZeros = arr => arr.every(v => v !== 0)
+        if (allNotZeros(this.score)) return outcome.TIE;
+        else return false;
     }
 
     /**
