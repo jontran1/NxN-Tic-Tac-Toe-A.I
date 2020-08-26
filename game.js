@@ -76,13 +76,12 @@ function GameManager(n) {
 
     this.board = new Board(n);
     this.ai = new AI(this.board);
-    this.ai = new AI(this.board);
     this.gameOver = false;
 
     /**
      * Check board for winner. 
      */
-    this.checkBoardForWinner = function () {
+    this.getGameStatus = function () {
         if (this.board.get(0, 0) && this.board.get(0, 1) && this.board.get(0, 2)) return true;
         return false;
     }
