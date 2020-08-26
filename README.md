@@ -23,6 +23,10 @@ What I hope to add in the future is the minimax algorithm for the a.i, a method 
 
   - It's pretty fast on a 3x3 grid. On a 4x4 grid, it slows a tiny bit. On 5x5 it really shows how slow DFS is.  Anything higher then or equal to 5 will be too slow. 
 
+  - What about Time Complexity?  I believe the time complexity is (n^2)^(n^2). This is because dfs has a time complexity of b^d. b = branching factor, d = depth. There are n^2 possible choices at each state. Its possible for the depth to reach n^2, because each time the a.i makes a move it recursively calls dfs again, thus making the depth n^2.  Note: I know once the a.i makes a move, the number of possible choices is decreased at each state. However I have a n^2 for loop that looks for open spaces at each state. Still, I am still unsure about the time complexity and I would need to do more research. Space Complexity I believe it to be n^2. 
+  
+    - Drawing out all possible branches for a 2x2 grid will show this.   
+    
     
 
 ![dfs_demo_2](/images/dfs_demo_2.gif)
