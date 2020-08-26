@@ -1,5 +1,11 @@
 let playerTurn = true;
 
+const outcome = {
+    PLAYER_WINS: 'player_wins',
+    AI_WINS: 'ai_wins',
+    TIE: 'tie'
+}
+
 /**
  * 
  * @param {Integer} n 
