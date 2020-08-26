@@ -50,10 +50,11 @@ function Board(n) {
     }
 
     /**
-     * 
+     * Returns the cell's innerHTML text. 
+     * If its an empty string it will be evaluated as false.
      * @param {Integer} i 
      * @param {Integer} j 
-     * @returns {boolean if false. cell if true}
+     * @returns {String}
      */
     this.get = function (i, j) {
         if (i < 0 || i >= n || j < 0 || j >= n) return false;
@@ -71,6 +72,18 @@ function AI(board) {
 
     this.dfs = function () {
         console.log(this.board)
+
+                    } else {
+                        this.board.set(row, col, 'x');
+                        this.gameManager.updateScore(row, col, 1);
+                        result = this.dfsHelper(board, score, !AITurn, row, col);
+                        this.gameManager.updateScore(row, col, -1);
+                    this.board.set(row, col, '');
+                    if (result && nextRow == -1 && nextCol == -1) return [row, col];
+                }
+            }
+        }
+        return false;
     }
 }
 
@@ -80,6 +93,7 @@ function GameManager(n) {
     this.ai = new AI(this.board);
     this.gameOver = false;
     this.score = new Array((2 * n) + 2).fill(0);
+    this.ai = new AI(this.board, this.score, this);
 
     /**
      * Check board for winner. 
@@ -89,10 +103,16 @@ function GameManager(n) {
         let n = (this.board.n * 2) + 2;
         for (let i = 0; i < n; i++) {
             if (this.score[i] == gridSize) return true;
+            if (this.score[i] == gridSize) return outcome.PLAYER_WINS;
         }
+
         return false;
     }
 
+    /**
+     * Updates the score. 
+     * The score array will how many times 'x's and 'o's 
+     * have been added to the board.
     this.updateScore = function (row, col, delta) {
         let gridSize = this.board.n;
         this.score[col] += delta;
@@ -118,10 +138,22 @@ function GameManager(n) {
         return function (e) {
             if (e.target.innerHTML) return;
             if (playerTurn) {
+            if (cell.innerHTML) return;
 
                 e.target.innerHTML = 'x';
 
+                board.set(row, col, 'o');
+                gameManager.updateScore(row, col, -1);
             }
+
+            status = gameManager.getGameStatus();
+
+            if (status === outcome.PLAYER_WINS || status === outcome.AI_WINS) gameManager.gameOver = true;
+                console.log("game over!");
+                console.log(gameManager.score);
+            }
+            playerTurn = !playerTurn
+
         }
     }
 
@@ -129,3 +161,5 @@ function GameManager(n) {
         this.board.generateBoard(this.turnClick(this, this.board));
     }
 }
+
+

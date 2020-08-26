@@ -1,4 +1,4 @@
 
 
-let gameManager = new GameManager(8);
+let gameManager = new GameManager(5);
 gameManager.startGame();
