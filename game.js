@@ -85,7 +85,11 @@ function GameManager(n) {
      * Check board for winner. 
      */
     this.getGameStatus = function () {
-        if (this.board.get(0, 0) && this.board.get(0, 1) && this.board.get(0, 2)) return true;
+        let gridSize = this.board.n;
+        let n = (this.board.n * 2) + 2;
+        for (let i = 0; i < n; i++) {
+            if (this.score[i] == gridSize) return true;
+        }
         return false;
     }
 
