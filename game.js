@@ -41,8 +41,11 @@ function Board(n) {
      * @returns {boolean}
      */
     this.set = function (i, j, symbol) {
-        if (symbol !== 'x' && symbol !== 'o') return false;
         if (i < 0 || i >= n || j < 0 || j >= n) return false;
+        if (symbol === '') {
+            this.board[i][j].innerHTML = symbol;
+            return true;
+        }
         if (this.board[i][j].innerHTML) return false;
 
         this.board[i][j].innerHTML = symbol;
