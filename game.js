@@ -122,6 +122,13 @@ function GameManager(n) {
      * Updates the score. 
      * The score array will how many times 'x's and 'o's 
      * have been added to the board.
+     * For example on a 3x3 board:
+     * [row1, row2, row3, col1, col2, col3, diag1, diag2]
+     * If any of these indices reach 3. We have a win.
+     * @param {Integer} row 
+     * @param {Integer} col 
+     * @param {Integer} delta 
+     */
     this.updateScore = function (row, col, delta) {
         let gridSize = this.board.n;
         this.score[col] += delta;
