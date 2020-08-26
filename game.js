@@ -76,19 +76,47 @@ function Board(n) {
 
 }
 
-function AI(board) {
+function AI(board, score, gameManager) {
     this.board = board;
+    this.score = score;
+    this.gameManager = gameManager;
+
 
     this.dfs = function () {
-        console.log(this.board)
+        console.log("calculationg turn...")
+        nextMove = this.dfsHelper(this.board, this.score, true, -1, -1);
+        return nextMove;
+    }
+
+    this.dfsHelper = function (board, score, AITurn, nextRow, nextCol) {
+        status = this.gameManager.getGameStatus()
+        if (status === outcome.AI_WINS) {
+            return [nextRow, nextCol];
+        }
+        if (status === outcome.TIE || status === outcome.PLAYER_WINS) {
+            return false;
+        }
+
+        result = false;
+
+        for (let row = 0; row < this.board.n; row++) {
+            for (let col = 0; col < this.board.n; col++) {
+                if (!this.board.get(row, col)) {
+                    if (AITurn) {
+                        this.board.set(row, col, 'o');
+                        this.gameManager.updateScore(row, col, -1);
+                        result = this.dfsHelper(board, score, !AITurn, row, col);
+                        this.gameManager.updateScore(row, col, 1);
 
                     } else {
                         this.board.set(row, col, 'x');
                         this.gameManager.updateScore(row, col, 1);
                         result = this.dfsHelper(board, score, !AITurn, row, col);
                         this.gameManager.updateScore(row, col, -1);
+                    }
                     this.board.set(row, col, '');
                     if (result && nextRow == -1 && nextCol == -1) return [row, col];
+                    if (result) return [nextRow, nextCol];
                 }
             }
         }
@@ -99,7 +127,6 @@ function AI(board) {
 function GameManager(n) {
 
     this.board = new Board(n);
-    this.ai = new AI(this.board);
     this.gameOver = false;
     this.score = new Array((2 * n) + 2).fill(0);
     this.ai = new AI(this.board, this.score, this);
@@ -158,12 +185,18 @@ function GameManager(n) {
      */
     this.turnClick = function (gameManager, board) {
         return function (e) {
-            if (e.target.innerHTML) return;
-            if (playerTurn) {
+            let cell = e.target;
             if (cell.innerHTML) return;
 
-                e.target.innerHTML = 'x';
+            // Player's input.
+            cell.innerHTML = 'x';
+            gameManager.updateScore(parseInt(cell.getAttribute("row")), parseInt(cell.getAttribute("col")), 1);
 
+
+            // AI's input.
+            nextMove = gameManager.ai.dfs();
+            if (nextMove) {
+                row = nextMove[0]; col = nextMove[1];
                 board.set(row, col, 'o');
                 gameManager.updateScore(row, col, -1);
             }
@@ -171,6 +204,8 @@ function GameManager(n) {
             status = gameManager.getGameStatus();
 
             if (status === outcome.PLAYER_WINS || status === outcome.AI_WINS) gameManager.gameOver = true;
+
+            if (gameManager.gameOver) {
                 console.log("game over!");
                 console.log(gameManager.score);
             }
