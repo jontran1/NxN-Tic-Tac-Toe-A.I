@@ -67,7 +67,7 @@ function Board(n) {
 function AI(board) {
     this.board = board;
 
-    this.nextMove = function () {
+    this.dfs = function () {
         console.log(this.board)
     }
 }
@@ -75,10 +75,13 @@ function AI(board) {
 function GameManager(n) {
 
     this.board = new Board(n);
-    this.gameOver = false;
     this.ai = new AI(this.board);
-    this.n = n;
+    this.ai = new AI(this.board);
+    this.gameOver = false;
 
+    /**
+     * Check board for winner. 
+     */
     this.checkBoardForWinner = function () {
         if (this.board.get(0, 0) && this.board.get(0, 1) && this.board.get(0, 2)) return true;
         return false;
@@ -92,6 +95,11 @@ function GameManager(n) {
         return this.board.get(i, j);
     }
 
+    /**
+     * 
+     * @param {GameManager} gameManager 
+     * @param {Board} board 
+     */
     this.turnClick = function (gameManager, board) {
         return function (e) {
             if (e.target.innerHTML) return;
