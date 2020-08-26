@@ -81,7 +81,13 @@ function AI(board, score, gameManager) {
     this.score = score;
     this.gameManager = gameManager;
 
-
+    /**
+     * Performs a depth first search on the board. 
+     * If there exist a winning path, the next possible move 
+     * towards that winning path will be taken.
+     * 
+     * If no path exist. boolean false will return.
+     */
     this.dfs = function () {
         console.log("calculationg turn...")
         nextMove = this.dfsHelper(this.board, this.score, true);
