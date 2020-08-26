@@ -199,7 +199,8 @@ function GameManager(n) {
                 row = nextMove[0]; col = nextMove[1];
                 board.set(row, col, 'o');
                 gameManager.updateScore(row, col, -1);
-            }
+                console.log("AI finish making move.");
+            } else console.log("AI can't win.");
 
             status = gameManager.getGameStatus();
 
