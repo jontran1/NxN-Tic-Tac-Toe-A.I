@@ -100,6 +100,9 @@ function GameManager(n) {
 
     /**
      * Check board for winner. 
+     * If one of the indices equals the grid size, player wins.
+     * If one of the indices equals negative grid size, AI wins.
+     * If none of the indices equals zero, its a tie. No empty spaces.
      */
     this.getGameStatus = function () {
         let n = (this.board.n * 2) + 2;
