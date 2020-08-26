@@ -77,6 +77,7 @@ function GameManager(n) {
     this.board = new Board(n);
     this.ai = new AI(this.board);
     this.gameOver = false;
+    this.score = new Array((2 * n) + 2).fill(0);
 
     /**
      * Check board for winner. 
@@ -84,6 +85,14 @@ function GameManager(n) {
     this.getGameStatus = function () {
         if (this.board.get(0, 0) && this.board.get(0, 1) && this.board.get(0, 2)) return true;
         return false;
+    }
+
+    this.updateScore = function (row, col, delta) {
+        let gridSize = this.board.n;
+        this.score[col] += delta;
+        this.score[gridSize + row] += delta;
+        if (row === col) this.score[2 * gridSize] += delta;
+        if (gridSize - 1 - row == col) this.score[2 * gridSize + 1] += delta;
     }
 
     this.set = function (i, j, symbol) {
