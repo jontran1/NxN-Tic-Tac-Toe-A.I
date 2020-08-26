@@ -23,6 +23,8 @@ function Board(n) {
 
             for (let col = 0; col < this.n; col++) {
                 cell = tableRow.insertCell(col);
+                cell.setAttribute("row", row);
+                cell.setAttribute("col", col);
                 cell.addEventListener('click', onClickEvent);
                 array.push(cell);
             }
