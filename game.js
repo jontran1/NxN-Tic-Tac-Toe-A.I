@@ -122,7 +122,6 @@ function AI(board, score, gameManager) {
                         this.gameManager.updateScore(row, col, -1);
                         result = this.dfsHelper(board, score, !AITurn);
                         this.gameManager.updateScore(row, col, 1);
-
                     } else {
                         this.board.set(row, col, 'x');
                         this.gameManager.updateScore(row, col, 1);
@@ -135,6 +134,70 @@ function AI(board, score, gameManager) {
             }
         }
         return false;
+    }
+
+    this.minimax = function (depth) {
+        nextMove = [];
+        this.minimaxHelper(this.board, this.score, depth, true, nextMove);
+        return nextMove;
+    }
+
+    this.minimaxHelper = function (board, score, depth, AITurn, nextMove) {
+        status = this.gameManager.getGameStatus();
+        if (depth === 0 && status === outcome.AI_WINS) {
+            return getMin(score);
+        }
+        if (depth === 0 && status === outcome.PLAYER_WINS) {
+            return getMax(score);
+        }
+        if (depth === 0 && status === outcome.TIE && AITurn) {
+            return getMin(score);
+        }
+        if (depth === 0 && status === outcome.TIE && !AITurn) {
+            return getMax(score);
+        }
+        if (depth == 0 && AITurn) {
+            return getMin(score);
+        }
+        if (depth == 0 && !AITurn) {
+            return getMax(score);
+        }
+
+        result = AITurn ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
+        for (let row = 0; row < board.n; row++) {
+            for (let col = 0; col < board.n; col++) {
+                if (!board.get(row, col)) {
+                    if (AITurn) {
+                        this.board.set(row, col, 'o');
+                        this.gameManager.updateScore(row, col, -1);
+                        eval = this.minimaxHelper(board, score, depth - 1, false, nextMove);
+                        this.gameManager.updateScore(row, col, 1);
+                        if (eval < result) {
+                            nextMove[0] = row; nextMove[1] = col;
+                            result = eval;
+                        }
+                    } else {
+                        this.board.set(row, col, 'x');
+                        this.gameManager.updateScore(row, col, 1);
+                        eval = this.minimaxHelper(board, score, depth - 1, true, nextMove);
+                        this.gameManager.updateScore(row, col, -1);
+                        if (eval > result) {
+                            nextMove[0] = row; nextMove[1] = col;
+                            result = eval;
+                        }
+                    }
+                    this.board.set(row, col, '');
+                }
+            }
+        }
+        if (result == Number.POSITIVE_INFINITY || result == Number.NEGATIVE_INFINITY) {
+            if (AITurn) {
+                return getMin(score);
+            } else {
+                return getMax(score);
+            }
+        }
+        return result;
     }
 }
 
@@ -208,8 +271,10 @@ function GameManager(n) {
 
 
             // AI's input.
-            nextMove = gameManager.ai.dfs();
-            if (nextMove) {
+            nextMove = gameManager.ai.minimax(3);
+            console.log("a.i's next move " + nextMove);
+            console.log(nextMove)
+            if (nextMove && nextMove.length == 2) {
                 row = nextMove[0]; col = nextMove[1];
                 board.set(row, col, 'o');
                 gameManager.updateScore(row, col, -1);
@@ -232,6 +297,14 @@ function GameManager(n) {
     this.startGame = function () {
         this.board.generateBoard(this.turnClick(this, this.board));
     }
+}
+
+getMin = function (array) {
+    return Math.min.apply(null, array);
+}
+
+getMax = function (array) {
+    return Math.max.apply(null, array);
 }
 
 
