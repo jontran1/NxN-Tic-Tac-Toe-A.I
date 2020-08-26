@@ -84,14 +84,14 @@ function AI(board, score, gameManager) {
 
     this.dfs = function () {
         console.log("calculationg turn...")
-        nextMove = this.dfsHelper(this.board, this.score, true, -1, -1);
+        nextMove = this.dfsHelper(this.board, this.score, true);
         return nextMove;
     }
 
-    this.dfsHelper = function (board, score, AITurn, nextRow, nextCol) {
+    this.dfsHelper = function (board, score, AITurn) {
         status = this.gameManager.getGameStatus()
         if (status === outcome.AI_WINS) {
-            return [nextRow, nextCol];
+            return true;
         }
         if (status === outcome.TIE || status === outcome.PLAYER_WINS) {
             return false;
@@ -105,18 +105,17 @@ function AI(board, score, gameManager) {
                     if (AITurn) {
                         this.board.set(row, col, 'o');
                         this.gameManager.updateScore(row, col, -1);
-                        result = this.dfsHelper(board, score, !AITurn, row, col);
+                        result = this.dfsHelper(board, score, !AITurn);
                         this.gameManager.updateScore(row, col, 1);
 
                     } else {
                         this.board.set(row, col, 'x');
                         this.gameManager.updateScore(row, col, 1);
-                        result = this.dfsHelper(board, score, !AITurn, row, col);
+                        result = this.dfsHelper(board, score, !AITurn);
                         this.gameManager.updateScore(row, col, -1);
                     }
                     this.board.set(row, col, '');
-                    if (result && nextRow == -1 && nextCol == -1) return [row, col];
-                    if (result) return [nextRow, nextCol];
+                    if (result) return [row, col];
                 }
             }
         }
