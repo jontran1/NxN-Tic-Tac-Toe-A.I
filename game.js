@@ -94,6 +94,15 @@ function AI(board, score, gameManager) {
         return nextMove;
     }
 
+    /**
+     * Recursivly looks for a possible path to the winng state 
+     * for the AI. If no path is found returns false.
+     * If a path is found, the starting move towards that path will return. 
+     * @param {Board} board 
+     * @param {Array} score 
+     * @param {Boolean} AITurn 
+     * @returns {Array or Boolean}
+     */
     this.dfsHelper = function (board, score, AITurn) {
         status = this.gameManager.getGameStatus()
         if (status === outcome.AI_WINS) {
