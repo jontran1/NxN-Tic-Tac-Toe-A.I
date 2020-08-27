@@ -138,63 +138,75 @@ function AI(board, score, gameManager) {
 
     this.minimax = function (depth) {
         nextMove = [];
-        this.minimaxHelper(this.board, this.score, depth, true, nextMove);
+        let result = Infinity;
+        for (let row = 0; row < board.n; row++) {
+            for (let col = 0; col < board.n; col++) {
+                if (!board.get(row, col)) {
+                    this.board.set(row, col, 'o');
+                    this.gameManager.updateScore(row, col, -1);
+                    eval = this.minimaxHelper(board, score, depth - 1, false);
+                    this.gameManager.updateScore(row, col, 1);
+                    this.board.set(row, col, '');
+                    if (eval < result) {
+                        nextMove[0] = row; nextMove[1] = col;
+                        result = eval;
+                    }
+                }
+            }
+        }
         return nextMove;
     }
 
-    this.minimaxHelper = function (board, score, depth, AITurn, nextMove) {
+    this.minimaxHelper = function (board, score, depth, AITurn) {
         status = this.gameManager.getGameStatus();
-        if (depth === 0 && status === outcome.AI_WINS) {
-            return getMin(score);
+        if (depth === 0 && AITurn) {
+            // console.log(depth + " " + AITurn)
+            min = Math.abs(getMin(score));
+            max = getMax(score);
+            if (min > max) return -1;
+            else return 0;
         }
-        if (depth === 0 && status === outcome.PLAYER_WINS) {
-            return getMax(score);
+        if (depth === 0 && !AITurn) {
+            // console.log(depth + " " + AITurn)
+            min = Math.abs(getMin(score));
+            max = getMax(score);
+            if (max > min) return 1;
+            else return 0;
         }
-        if (depth === 0 && status === outcome.TIE && AITurn) {
-            return getMin(score);
+        if (status === outcome.AI_WINS) {
+            return -1;
         }
-        if (depth === 0 && status === outcome.TIE && !AITurn) {
-            return getMax(score);
+        if (status === outcome.PLAYER_WINS) {
+            return 1;
         }
-        if (depth == 0 && AITurn) {
-            return getMin(score);
-        }
-        if (depth == 0 && !AITurn) {
-            return getMax(score);
+        if (status === outcome.TIE) {
+            return 0;
         }
 
-        result = AITurn ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
+        let result = AITurn ? Infinity : -Infinity;
+
         for (let row = 0; row < board.n; row++) {
             for (let col = 0; col < board.n; col++) {
                 if (!board.get(row, col)) {
                     if (AITurn) {
                         this.board.set(row, col, 'o');
                         this.gameManager.updateScore(row, col, -1);
-                        eval = this.minimaxHelper(board, score, depth - 1, false, nextMove);
+                        eval = this.minimaxHelper(board, score, depth - 1, !AITurn);
                         this.gameManager.updateScore(row, col, 1);
                         if (eval < result) {
-                            nextMove[0] = row; nextMove[1] = col;
                             result = eval;
                         }
                     } else {
                         this.board.set(row, col, 'x');
                         this.gameManager.updateScore(row, col, 1);
-                        eval = this.minimaxHelper(board, score, depth - 1, true, nextMove);
+                        eval = this.minimaxHelper(board, score, depth - 1, !AITurn);
                         this.gameManager.updateScore(row, col, -1);
                         if (eval > result) {
-                            nextMove[0] = row; nextMove[1] = col;
                             result = eval;
                         }
                     }
                     this.board.set(row, col, '');
                 }
-            }
-        }
-        if (result == Number.POSITIVE_INFINITY || result == Number.NEGATIVE_INFINITY) {
-            if (AITurn) {
-                return getMin(score);
-            } else {
-                return getMax(score);
             }
         }
         return result;
@@ -299,12 +311,26 @@ function GameManager(n) {
     }
 }
 
-getMin = function (array) {
+const getMin = function (array) {
     return Math.min.apply(null, array);
 }
 
-getMax = function (array) {
+const getMax = function (array) {
     return Math.max.apply(null, array);
 }
 
+const countNegativeNumbers = function (array) {
+    let count = 0;
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] < 0) count++;
+    }
+    return count;
+}
 
+const countPositiveNumbers = function (array) {
+    let count = 0;
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] > 0) count++;
+    }
+    return count;
+}
