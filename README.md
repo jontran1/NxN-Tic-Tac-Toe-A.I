@@ -34,3 +34,28 @@ What I hope to add in the future is the minimax algorithm for the a.i, a method 
 
 
 ![dfs_demo_1](/images/dfs_demo_1.gif)
+
+#### MiniMax 
+
+- Minimax is an interesting decision making algorithm. It basically plays out the game for you. In my version I have the AI minimizing the score while the player is trying to maximize. Each level of this recursive tree is trying to achieve the best outcome for themselves.     
+- To save time I implemented a max depth, If I didn't do this, the time complexity would be too large. 
+
+![minimax_demo_1](/images/minimax_demo_1.gif)
+
+![minimax_demo_2](/images/minimax_demo_2.gif)
+
+As you can see, even on a 5x5 board its too slow for normal play. Limiting the depth to say 3 gave better results. 
+
+#### Minimax Pruning
+
+- Something as minimax algorithm only different is this algorithm will prune a subtree if there's no point in going there.
+
+![minimaxpruning_demo_1](/images/minimaxpruning_demo_1.gif)
+
+
+
+![minimaxpruning_demo_2](/images/minimaxpruning_demo_2.gif)
+
+
+
+![minimaxpruning_demo_3](/images/minimaxpruning_demo_3.gif)
