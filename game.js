@@ -261,9 +261,7 @@ function AI(board, score, gameManager) {
                         this.gameManager.updateScore(row, col, 1);
                         this.board.set(row, col, '');
                         alpha = Math.min(alpha, eval);
-                        if (eval < result) {
-                            result = eval;
-                        }
+                        result = Math.min(result, eval);
                         if (beta >= alpha) break;
 
                     } else {
@@ -273,9 +271,7 @@ function AI(board, score, gameManager) {
                         this.gameManager.updateScore(row, col, -1);
                         this.board.set(row, col, '');
                         beta = Math.max(beta, eval);
-                        if (eval > result) {
-                            result = eval;
-                        }
+                        result = Math.max(result, eval);
                         if (beta >= alpha) break;
                     }
                 }
