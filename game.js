@@ -160,27 +160,22 @@ function AI(board, score, gameManager) {
     this.minimaxHelper = function (board, score, depth, AITurn) {
         status = this.gameManager.getGameStatus();
         if (depth === 0 && AITurn) {
-            // console.log(depth + " " + AITurn)
-            min = Math.abs(getMin(score));
-            max = getMax(score);
-            if (min > max) return -1;
-            else return 0;
+            return getMin(score);
         }
         if (depth === 0 && !AITurn) {
-            // console.log(depth + " " + AITurn)
-            min = Math.abs(getMin(score));
-            max = getMax(score);
-            if (max > min) return 1;
-            else return 0;
+            return getMax(score);
         }
         if (status === outcome.AI_WINS) {
-            return -1;
+            return getMin(score);
         }
         if (status === outcome.PLAYER_WINS) {
-            return 1;
+            return getMax(score);
         }
-        if (status === outcome.TIE) {
-            return 0;
+        if (status === outcome.TIE && AITurn) {
+            return getMin(score);
+        }
+        if (status === outcome.TIE && !AITurn) {
+            return getMax(score);
         }
 
         let result = AITurn ? Infinity : -Infinity;
