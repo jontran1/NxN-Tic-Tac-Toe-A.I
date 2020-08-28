@@ -188,6 +188,20 @@ function AI(board, score, gameManager) {
                         this.gameManager.updateScore(row, col, -1);
                         eval = this.minimaxHelper(board, score, depth - 1, !AITurn);
                         this.gameManager.updateScore(row, col, 1);
+                        result = Math.min(result, eval);
+                    } else {
+                        this.board.set(row, col, 'x');
+                        this.gameManager.updateScore(row, col, 1);
+                        eval = this.minimaxHelper(board, score, depth - 1, !AITurn);
+                        this.gameManager.updateScore(row, col, -1);
+                        result = Math.max(result, eval);
+                    }
+                    this.board.set(row, col, '');
+                }
+            }
+        }
+        return result;
+    }
                         if (eval < result) {
                             result = eval;
                         }
