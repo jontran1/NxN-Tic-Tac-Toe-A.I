@@ -202,19 +202,82 @@ function AI(board, score, gameManager) {
         }
         return result;
     }
+
+    this.minimaxPruning = function (depth) {
+        alpha = Infinity; beta = -Infinity;
+        nextMove = [];
+        let result = Infinity;
+        for (let row = 0; row < board.n; row++) {
+            for (let col = 0; col < board.n; col++) {
+                if (!board.get(row, col)) {
+                    this.board.set(row, col, 'o');
+                    this.gameManager.updateScore(row, col, -1);
+                    eval = this.minimaxPruningHelper(board, score, depth - 1, false, alpha, beta);
+                    this.gameManager.updateScore(row, col, 1);
+                    this.board.set(row, col, '');
+                    if (eval < result) {
+                        nextMove[0] = row; nextMove[1] = col;
+                        result = eval;
+                    }
+                    if (beta >= alpha) {
+                        break;
+                    }
+                }
+            }
+        }
+        return nextMove.length === 2 ? nextMove : false;
+    }
+
+    this.minimaxPruningHelper = function (board, score, depth, AITurn, alpha, beta) {
+        status = this.gameManager.getGameStatus();
+        if (depth === 0 && AITurn) {
+            return getMin(score);
+        }
+        if (depth === 0 && !AITurn) {
+            return getMax(score);
+        }
+        if (status === outcome.AI_WINS) {
+            return getMin(score);
+        }
+        if (status === outcome.PLAYER_WINS) {
+            return getMax(score);
+        }
+        if (status === outcome.TIE && AITurn) {
+            return getMin(score);
+        }
+        if (status === outcome.TIE && !AITurn) {
+            return getMax(score);
+        }
+
+        let result = AITurn ? Infinity : -Infinity;
+
+        for (let row = 0; row < board.n; row++) {
+            for (let col = 0; col < board.n; col++) {
+                if (!board.get(row, col)) {
+                    if (AITurn) {
+                        this.board.set(row, col, 'o');
+                        this.gameManager.updateScore(row, col, -1);
+                        eval = this.minimaxPruningHelper(board, score, depth - 1, !AITurn, alpha, beta);
+                        this.gameManager.updateScore(row, col, 1);
+                        this.board.set(row, col, '');
+                        alpha = Math.min(alpha, eval);
                         if (eval < result) {
                             result = eval;
                         }
+                        if (beta >= alpha) break;
+
                     } else {
                         this.board.set(row, col, 'x');
                         this.gameManager.updateScore(row, col, 1);
-                        eval = this.minimaxHelper(board, score, depth - 1, !AITurn);
+                        eval = this.minimaxPruningHelper(board, score, depth - 1, !AITurn, alpha, beta);
                         this.gameManager.updateScore(row, col, -1);
+                        this.board.set(row, col, '');
+                        beta = Math.max(beta, eval);
                         if (eval > result) {
                             result = eval;
                         }
+                        if (beta >= alpha) break;
                     }
-                    this.board.set(row, col, '');
                 }
             }
         }
