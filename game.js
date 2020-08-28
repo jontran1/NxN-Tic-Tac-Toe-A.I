@@ -157,12 +157,12 @@ function AI(board, score, gameManager) {
         return nextMove.length === 2 ? nextMove : false;
     }
 
-    this.minimaxHelper = function (board, score, depth, AITurn) {
+    this.minimaxHelper = function (board, score, depth, minimizingAI) {
         status = this.gameManager.getGameStatus();
-        if (depth === 0 && AITurn) {
+        if (depth === 0 && minimizingAI) {
             return getMin(score);
         }
-        if (depth === 0 && !AITurn) {
+        if (depth === 0 && !minimizingAI) {
             return getMax(score);
         }
         if (status === outcome.AI_WINS) {
@@ -171,28 +171,28 @@ function AI(board, score, gameManager) {
         if (status === outcome.PLAYER_WINS) {
             return getMax(score);
         }
-        if (status === outcome.TIE && AITurn) {
+        if (status === outcome.TIE && minimizingAI) {
             return getMin(score);
         }
-        if (status === outcome.TIE && !AITurn) {
+        if (status === outcome.TIE && !minimizingAI) {
             return getMax(score);
         }
 
-        let result = AITurn ? Infinity : -Infinity;
+        let result = minimizingAI ? Infinity : -Infinity;
 
         for (let row = 0; row < board.n; row++) {
             for (let col = 0; col < board.n; col++) {
                 if (!board.get(row, col)) {
-                    if (AITurn) {
+                    if (minimizingAI) {
                         this.board.set(row, col, 'o');
                         this.gameManager.updateScore(row, col, -1);
-                        eval = this.minimaxHelper(board, score, depth - 1, !AITurn);
+                        eval = this.minimaxHelper(board, score, depth - 1, !minimizingAI);
                         this.gameManager.updateScore(row, col, 1);
                         result = Math.min(result, eval);
                     } else {
                         this.board.set(row, col, 'x');
                         this.gameManager.updateScore(row, col, 1);
-                        eval = this.minimaxHelper(board, score, depth - 1, !AITurn);
+                        eval = this.minimaxHelper(board, score, depth - 1, !minimizingAI);
                         this.gameManager.updateScore(row, col, -1);
                         result = Math.max(result, eval);
                     }
@@ -225,12 +225,12 @@ function AI(board, score, gameManager) {
         return nextMove.length === 2 ? nextMove : false;
     }
 
-    this.minimaxPruningHelper = function (board, score, depth, AITurn, alpha, beta) {
+    this.minimaxPruningHelper = function (board, score, depth, minimizingAI, alpha, beta) {
         status = this.gameManager.getGameStatus();
-        if (depth === 0 && AITurn) {
+        if (depth === 0 && minimizingAI) {
             return getMin(score);
         }
-        if (depth === 0 && !AITurn) {
+        if (depth === 0 && !minimizingAI) {
             return getMax(score);
         }
         if (status === outcome.AI_WINS) {
@@ -239,22 +239,22 @@ function AI(board, score, gameManager) {
         if (status === outcome.PLAYER_WINS) {
             return getMax(score);
         }
-        if (status === outcome.TIE && AITurn) {
+        if (status === outcome.TIE && minimizingAI) {
             return getMin(score);
         }
-        if (status === outcome.TIE && !AITurn) {
+        if (status === outcome.TIE && !minimizingAI) {
             return getMax(score);
         }
 
-        let result = AITurn ? Infinity : -Infinity;
+        let result = minimizingAI ? Infinity : -Infinity;
 
         for (let row = 0; row < board.n; row++) {
             for (let col = 0; col < board.n; col++) {
                 if (!board.get(row, col)) {
-                    if (AITurn) {
+                    if (minimizingAI) {
                         this.board.set(row, col, 'o');
                         this.gameManager.updateScore(row, col, -1);
-                        eval = this.minimaxPruningHelper(board, score, depth - 1, !AITurn, alpha, beta);
+                        eval = this.minimaxPruningHelper(board, score, depth - 1, !minimizingAI, alpha, beta);
                         this.gameManager.updateScore(row, col, 1);
                         this.board.set(row, col, '');
                         alpha = Math.min(alpha, eval);
@@ -264,7 +264,7 @@ function AI(board, score, gameManager) {
                     } else {
                         this.board.set(row, col, 'x');
                         this.gameManager.updateScore(row, col, 1);
-                        eval = this.minimaxPruningHelper(board, score, depth - 1, !AITurn, alpha, beta);
+                        eval = this.minimaxPruningHelper(board, score, depth - 1, !minimizingAI, alpha, beta);
                         this.gameManager.updateScore(row, col, -1);
                         this.board.set(row, col, '');
                         beta = Math.max(beta, eval);
@@ -367,7 +367,6 @@ function GameManager(n) {
                 console.log("game over!");
                 console.log(gameManager.score);
             }
-            playerTurn = !playerTurn
 
         }
     }
