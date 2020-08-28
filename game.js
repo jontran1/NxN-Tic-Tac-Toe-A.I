@@ -219,9 +219,6 @@ function AI(board, score, gameManager) {
                         nextMove[0] = row; nextMove[1] = col;
                         result = eval;
                     }
-                    if (beta >= alpha) {
-                        break;
-                    }
                 }
             }
         }
@@ -273,6 +270,7 @@ function AI(board, score, gameManager) {
                         beta = Math.max(beta, eval);
                         result = Math.max(result, eval);
                         if (beta >= alpha) break;
+
                     }
                 }
             }
