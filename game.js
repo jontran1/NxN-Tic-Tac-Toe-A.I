@@ -154,7 +154,7 @@ function AI(board, score, gameManager) {
                 }
             }
         }
-        return nextMove;
+        return nextMove.length === 2 ? nextMove : false;
     }
 
     this.minimaxHelper = function (board, score, depth, AITurn) {
@@ -281,7 +281,7 @@ function GameManager(n) {
             nextMove = gameManager.ai.minimax(3);
             console.log("a.i's next move " + nextMove);
             console.log(nextMove)
-            if (nextMove && nextMove.length == 2) {
+            if (nextMove) {
                 row = nextMove[0]; col = nextMove[1];
                 board.set(row, col, 'o');
                 gameManager.updateScore(row, col, -1);
