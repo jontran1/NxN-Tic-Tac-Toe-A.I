@@ -103,7 +103,7 @@ function AI(board, score, gameManager) {
      * @param {Boolean} AITurn 
      * @returns {Array or Boolean}
      */
-    this.dfsHelper = function (board, score, AITurn) {
+    this.dfsHelper = function (board, score, minimizingAI) {
         status = this.gameManager.getGameStatus()
         if (status === outcome.AI_WINS) {
             return true;
@@ -117,15 +117,15 @@ function AI(board, score, gameManager) {
         for (let row = 0; row < this.board.n; row++) {
             for (let col = 0; col < this.board.n; col++) {
                 if (!this.board.get(row, col)) {
-                    if (AITurn) {
+                    if (minimizingAI) {
                         this.board.set(row, col, 'o');
                         this.gameManager.updateScore(row, col, -1);
-                        result = this.dfsHelper(board, score, !AITurn);
+                        result = this.dfsHelper(board, score, !minimizingAI);
                         this.gameManager.updateScore(row, col, 1);
                     } else {
                         this.board.set(row, col, 'x');
                         this.gameManager.updateScore(row, col, 1);
-                        result = this.dfsHelper(board, score, !AITurn);
+                        result = this.dfsHelper(board, score, !minimizingAI);
                         this.gameManager.updateScore(row, col, -1);
                     }
                     this.board.set(row, col, '');
@@ -349,7 +349,7 @@ function GameManager(n) {
 
 
             // AI's input.
-            nextMove = gameManager.ai.minimax(3);
+            nextMove = gameManager.ai.minimaxPruning(5);
             console.log("a.i's next move " + nextMove);
             console.log(nextMove)
             if (nextMove) {
