@@ -340,12 +340,13 @@ function AI(board, score, gameManager) {
     }
 }
 
-function GameManager(n) {
+function GameManager(n, depth = 3) {
 
     this.board = new Board(n);
     this.gameOver = false;
     this.score = new Array((2 * n) + 2).fill(0);
     this.ai = new AI(this.board, this.score, this);
+    this.depth = depth;
 
     /**
      * Check board for winner. 
