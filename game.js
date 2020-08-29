@@ -151,8 +151,16 @@ function AI(board, score, gameManager) {
      */
     this.dfs = function () {
         console.log("calculationg turn...")
+        firstMove = []
+        for (let row = 0; row < this.board.n; row++) {
+            for (let col = 0; col < this.board.n; col++) {
+                if (!this.board.get(row, col)) {
+                    firstMove[0] = row; firstMove[1] = col;
+                }
+            }
+        }
         nextMove = this.dfsHelper(this.board, this.score, true);
-        return nextMove;
+        return !nextMove ? firstMove : nextMove;
     }
 
     /**
