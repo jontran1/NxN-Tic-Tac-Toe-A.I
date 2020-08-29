@@ -364,7 +364,7 @@ function GameManager(n) {
 
         for (let row = 0; row < this.board.n; row++) {
             for (let col = 0; col < this.board.n; col++) {
-                if (!this.board.get(row, col)) return false;
+                if (!this.board.get(row, col)) return "";
             }
         }
         return outcome.TIE;
