@@ -79,6 +79,69 @@ function AI(board, score, gameManager) {
     this.score = score;
     this.gameManager = gameManager;
 
+    this.dfsShortestPath = function () {
+        nextMove = [];
+        min = Infinity;
+        for (let row = 0; row < this.board.n; row++) {
+            for (let col = 0; col < this.board.n; col++) {
+                if (!this.board.get(row, col)) {
+                    nextMove[0] = row; nextMove[1] = col;
+                }
+            }
+        }
+        for (let row = 0; row < this.board.n; row++) {
+            for (let col = 0; col < this.board.n; col++) {
+                if (!this.board.get(row, col)) {
+                    this.board.set(row, col, 'o');
+                    this.gameManager.updateScore(row, col, -1);
+                    path = this.dfsShortestPathHelper(this.board, this.score, false);
+                    this.board.set(row, col, '');
+                    this.gameManager.updateScore(row, col, 1);
+
+                    if (path < min) {
+                        console.log(path)
+                        min = path;
+                        nextMove[0] = row; nextMove[1] = col;
+                    }
+                }
+            }
+        }
+        return nextMove.length === 2 ? nextMove : false;
+    }
+
+    this.dfsShortestPathHelper = function (board, score, minimizingAI) {
+        status = this.gameManager.getGameStatus()
+        if (status === outcome.AI_WINS) {
+            return 0;
+        }
+        if (status === outcome.TIE || status === outcome.PLAYER_WINS) {
+            return Infinity;
+        }
+
+        result = Infinity;
+
+        for (let row = 0; row < this.board.n; row++) {
+            for (let col = 0; col < this.board.n; col++) {
+                if (!this.board.get(row, col)) {
+                    if (minimizingAI) {
+                        this.board.set(row, col, 'o');
+                        this.gameManager.updateScore(row, col, -1);
+                        result = this.dfsShortestPathHelper(board, score, !minimizingAI);
+                        this.gameManager.updateScore(row, col, 1);
+                    } else {
+                        this.board.set(row, col, 'x');
+                        this.gameManager.updateScore(row, col, 1);
+                        result = this.dfsShortestPathHelper(board, score, !minimizingAI);
+                        this.gameManager.updateScore(row, col, -1);
+                    }
+                    this.board.set(row, col, '');
+                    if (result !== Infinity) return result + 1;
+                }
+            }
+        }
+        return Infinity;
+    }
+
     /**
      * Performs a depth first search on the board. 
      * If there exist a winning path, the next possible move 
