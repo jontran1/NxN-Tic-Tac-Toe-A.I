@@ -4,6 +4,13 @@ const outcome = {
     TIE: 'tie'
 }
 
+const algorithm = {
+    DFS: "dfs",
+    DFS_Shortest_Path: "dfs_shortest_path",
+    MINIMAX: "minimax",
+    MINIMAX_PRUNING: "minimax_pruning"
+}
+
 /**
  * 
  * @param {Integer} n 
@@ -355,6 +362,7 @@ function GameManager(n, depth = 3) {
     this.score = new Array((2 * n) + 2).fill(0);
     this.ai = new AI(this.board, this.score, this);
     this.depth = depth;
+    this.algorithm = algorithm.MINIMAX_PRUNING;
 
     /**
      * Check board for winner. 
@@ -413,6 +421,8 @@ function GameManager(n, depth = 3) {
      */
     this.turnClick = function (gameManager, board) {
         return function (e) {
+            console.log("depth: " + gameManager.depth)
+            if (gameManager.gameOver) return;
             let cell = e.target;
             if (cell.innerHTML) return;
 
@@ -424,7 +434,20 @@ function GameManager(n, depth = 3) {
 
             if (!status) {
                 // AI's input.
-                nextMove = gameManager.ai.minimaxPruning(gameManager.depth);
+                if (gameManager.algorithm === algorithm.MINIMAX_PRUNING) {
+                    console.log("MINIMAX PRUNING");
+                    nextMove = gameManager.ai.minimaxPruning(gameManager.depth);
+                } else if (gameManager.algorithm === algorithm.MINIMAX) {
+                    console.log("MINIMAX");
+                    nextMove = gameManager.ai.minimax(gameManager.depth);
+                } else if (gameManager.algorithm === algorithm.DFS_Shortest_Path) {
+                    console.log("DFS Shortest Path");
+                    nextMove = gameManager.ai.dfsShortestPath();
+                } else if (gameManager.algorithm === algorithm.DFS) {
+                    console.log("DFS");
+
+                    nextMove = gameManager.ai.dfs();
+                }
 
                 if (nextMove) {
                     row = nextMove[0]; col = nextMove[1];
