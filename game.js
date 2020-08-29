@@ -299,9 +299,12 @@ function GameManager(n) {
             if (this.score[i] == gridSize) return outcome.PLAYER_WINS;
         }
 
-        const allNotZeros = arr => arr.every(v => v !== 0)
-        if (allNotZeros(this.score)) return outcome.TIE;
-        else return false;
+        for (let row = 0; row < this.board.n; row++) {
+            for (let col = 0; col < this.board.n; col++) {
+                if (!this.board.get(row, col)) return false;
+            }
+        }
+        return outcome.TIE;
     }
 
     /**
