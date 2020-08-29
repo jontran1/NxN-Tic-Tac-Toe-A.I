@@ -375,6 +375,20 @@ function GameManager(n) {
     this.startGame = function () {
         this.board.generateBoard(this.turnClick(this, this.board));
     }
+
+    this.resetGame = function (n) {
+        // Destory the board.
+        let table = document.getElementById("board");
+        while (table.firstChild) {
+            table.removeChild(table.firstChild);
+        }
+        this.board = new Board(n);
+        this.gameOver = false;
+        this.score = new Array((2 * n) + 2).fill(0);
+        this.ai = new AI(this.board, this.score, this);
+        this.board.generateBoard(this.turnClick(this, this.board));
+        this.displayMessage("");
+    }
 }
 
 const getMin = function (array) {
