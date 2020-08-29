@@ -436,11 +436,6 @@ function GameManager(n) {
                 gameManager.displayMessage("TIE");
             }
 
-            if (gameManager.gameOver) {
-                console.log("game over!");
-                console.log(gameManager.score);
-            }
-
         }
     }
 
