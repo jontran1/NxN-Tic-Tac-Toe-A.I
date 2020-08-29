@@ -411,17 +411,18 @@ function GameManager(n) {
             cell.innerHTML = 'x';
             gameManager.updateScore(parseInt(cell.getAttribute("row")), parseInt(cell.getAttribute("col")), 1);
 
+            status = gameManager.getGameStatus();
 
-            // AI's input.
-            nextMove = gameManager.ai.minimaxPruning(5);
-            console.log("a.i's next move " + nextMove);
-            console.log(nextMove)
-            if (nextMove) {
-                row = nextMove[0]; col = nextMove[1];
-                board.set(row, col, 'o');
-                gameManager.updateScore(row, col, -1);
-                console.log("AI finish making move.");
-            } else console.log("AI can't win.");
+            if (!status) {
+                // AI's input.
+                nextMove = gameManager.ai.minimaxPruning(gameManager.depth);
+
+                if (nextMove) {
+                    row = nextMove[0]; col = nextMove[1];
+                    board.set(row, col, 'o');
+                    gameManager.updateScore(row, col, -1);
+                } else console.log("AI can't win.");
+            }
 
             status = gameManager.getGameStatus();
 
