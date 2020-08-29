@@ -389,6 +389,12 @@ function GameManager(n) {
         this.board.generateBoard(this.turnClick(this, this.board));
         this.displayMessage("");
     }
+
+
+    this.displayMessage = function (message) {
+        document.getElementById("status").innerHTML = message;
+    }
+
 }
 
 const getMin = function (array) {
