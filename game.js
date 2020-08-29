@@ -362,7 +362,15 @@ function GameManager(n) {
 
             status = gameManager.getGameStatus();
 
-            if (status === outcome.PLAYER_WINS || status === outcome.AI_WINS) gameManager.gameOver = true;
+            if (status === outcome.PLAYER_WINS || status === outcome.AI_WINS || status === outcome.TIE) gameManager.gameOver = true;
+
+            if (status === outcome.PLAYER_WINS) {
+                gameManager.displayMessage("You Wins!");
+            } else if (status === outcome.AI_WINS) {
+                gameManager.displayMessage("AI Wins!")
+            } else if (status === outcome.TIE) {
+                gameManager.displayMessage("TIE");
+            }
 
             if (gameManager.gameOver) {
                 console.log("game over!");
