@@ -7,7 +7,7 @@ gameManager.startGame();
 document.getElementById("resetButton").addEventListener("click", () => {
     gameManager.resetGame(n);
     gameManager.ai.depth = parseInt(depth);
-    document.getElementById("depth").innerHTML = "Current Depth:" + depth;
+    document.getElementById("depth").innerHTML = "Current Depth:" + gameManager.depth;
 });
 
 document.getElementById("setDepthButton").addEventListener("click", () => {
@@ -21,4 +21,20 @@ document.getElementById("changeBoardSizeButton").addEventListener("click", () =>
     n = parseInt(newSize);
     gameManager.resetGame(n);
     document.getElementById("depth").innerHTML = "Current Depth:" + gameManager.depth;
+});
+
+document.getElementById("minimaxPruning").addEventListener("click", () => {
+    gameManager.algorithm = algorithm.MINIMAX_PRUNING;
+});
+
+document.getElementById("minimax").addEventListener("click", () => {
+    gameManager.algorithm = algorithm.MINIMAX;
+});
+
+document.getElementById("dfs_shortest_path").addEventListener("click", () => {
+    gameManager.algorithm = algorithm.DFS_Shortest_Path;
+});
+
+document.getElementById("dfs").addEventListener("click", () => {
+    gameManager.algorithm = algorithm.DFS;
 });
