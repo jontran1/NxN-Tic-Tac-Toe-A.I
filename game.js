@@ -335,7 +335,7 @@ function AI(board, score, gameManager) {
                         this.board.set(row, col, '');
                         alpha = Math.min(alpha, eval);
                         result = Math.min(result, eval);
-                        if (beta >= alpha) break;
+                        if (beta >= alpha) return result;
 
                     } else {
                         this.board.set(row, col, 'x');
@@ -345,7 +345,7 @@ function AI(board, score, gameManager) {
                         this.board.set(row, col, '');
                         beta = Math.max(beta, eval);
                         result = Math.max(result, eval);
-                        if (beta >= alpha) break;
+                        if (beta >= alpha) return result;
 
                     }
                 }
