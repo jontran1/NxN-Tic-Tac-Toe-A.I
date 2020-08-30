@@ -133,20 +133,20 @@ function AI(board, score, gameManager) {
                     if (minimizingAI) {
                         this.board.set(row, col, 'o');
                         this.gameManager.updateScore(row, col, -1);
-                        result = this.dfsShortestPathHelper(board, score, !minimizingAI);
+                        path = this.dfsShortestPathHelper(board, score, !minimizingAI);
                         this.gameManager.updateScore(row, col, 1);
                     } else {
                         this.board.set(row, col, 'x');
                         this.gameManager.updateScore(row, col, 1);
-                        result = this.dfsShortestPathHelper(board, score, !minimizingAI);
+                        path = this.dfsShortestPathHelper(board, score, !minimizingAI);
                         this.gameManager.updateScore(row, col, -1);
                     }
                     this.board.set(row, col, '');
-                    if (result !== Infinity) return result + 1;
+                    result = Math.min(result, path);
                 }
             }
         }
-        return Infinity;
+        return result + 1;
     }
 
     /**
