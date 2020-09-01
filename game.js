@@ -463,7 +463,8 @@ function GameManager(n, depth = 3) {
     }
 
     /**
-     * 
+     * Activates when the user clicks on the board.
+     * Where the main gameplay loop actually happens.
      * @param {GameManager} gameManager 
      * @param {Board} board 
      */
