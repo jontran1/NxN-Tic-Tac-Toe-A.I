@@ -88,6 +88,7 @@ function AI(board, score, gameManager) {
 
     /**
      * Recursively searches for the shortest path for A.I to reach win state.
+     * @returns Array, false if not path is found.
      */
     this.dfsShortestPath = function () {
         nextMove = [];
