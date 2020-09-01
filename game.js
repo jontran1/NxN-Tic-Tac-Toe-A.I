@@ -306,6 +306,13 @@ function AI(board, score, gameManager) {
         return result;
     }
 
+    /**
+     * Recursively searches for the next best possible move. 
+     * Uses the minimax algorthim with the A.I minimizing. 
+     * The lower the result the better the move is for the A.I.
+     * @param {Integer} depth 
+     * @returns {Array} nextMove, {Boolean} false if not best move exist.
+     */
     this.minimaxPruning = function (depth) {
         alpha = Infinity; beta = -Infinity;
         nextMove = [];
@@ -328,6 +335,20 @@ function AI(board, score, gameManager) {
         return nextMove.length === 2 ? nextMove : false;
     }
 
+    /**
+     * Recursively plays through the game taking turns between the player 
+     * and A.I. Player is trying to get the highest possible result and A.I is
+     * trying to get the lowest possible result. 
+     * This algorthim is much faster then minimax because it will skip sub trees if 
+     * searching it is not needed.
+     * @param {Board} board 
+     * @param {Array} score 
+     * @param {Integer} depth 
+     * @param {Boolean} minimizingAI 
+     * @param {Integer} alpha 
+     * @param {Integer} beta 
+     * @returns {Number}
+     */
     this.minimaxPruningHelper = function (board, score, depth, minimizingAI, alpha, beta) {
         status = this.gameManager.getGameStatus();
         if (depth === 0 && minimizingAI) {
