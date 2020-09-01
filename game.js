@@ -86,6 +86,9 @@ function AI(board, score, gameManager) {
     this.score = score;
     this.gameManager = gameManager;
 
+    /**
+     * Recursively searches for the shortest path for A.I to reach win state.
+     */
     this.dfsShortestPath = function () {
         nextMove = [];
         min = Infinity;
@@ -116,6 +119,12 @@ function AI(board, score, gameManager) {
         return nextMove.length === 2 ? nextMove : false;
     }
 
+    /**
+     * Recursively searches for the shortest path length to the A.I's winning state.
+     * @param {Board} board 
+     * @param {Array} score 
+     * @param {Boolean} minimizingAI 
+     */
     this.dfsShortestPathHelper = function (board, score, minimizingAI) {
         status = this.gameManager.getGameStatus()
         if (status === outcome.AI_WINS) {
