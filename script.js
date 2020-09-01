@@ -8,7 +8,6 @@ alert("Depth only applies to Minimax and Minimax Pruning.")
 
 document.getElementById("resetButton").addEventListener("click", () => {
     gameManager.resetGame(n);
-    gameManager.ai.depth = parseInt(depth);
     document.getElementById("depth").innerHTML = "Current Depth:" + gameManager.depth;
 });
 
