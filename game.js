@@ -461,7 +461,7 @@ function GameManager(n, depth = 3) {
             if (status === outcome.PLAYER_WINS || status === outcome.AI_WINS || status === outcome.TIE) gameManager.gameOver = true;
 
             if (status === outcome.PLAYER_WINS) {
-                gameManager.displayMessage("You Wins!");
+                gameManager.displayMessage("You Win!");
             } else if (status === outcome.AI_WINS) {
                 gameManager.displayMessage("AI Wins!")
             } else if (status === outcome.TIE) {
