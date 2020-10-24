@@ -12,8 +12,18 @@ const algorithm = {
 }
 
 const ai_status = {
-    WAITING_FOR_USER_INPUT: "Awaiting Input...",
-    AI_TURN: "Calculating...",
+    DFS: "dfs",
+    DFS_Shortest_Path: "dfs_shortest_path",
+    MINIMAX: "minimax",
+    MINIMAX_PRUNING: "minimax_pruning",
+    RESET_GAME: "reset_game",
+    LOWER_DEPTH: "lower_depth",
+    HIGHER_DEPTH: "higher_depth",
+    CHANGE_BOARD_SIZE: "change_board_size",
+    PLAYER_WINS: "player_wins",
+    AI_WINS: "ai_wins",
+    TIE: "tie",
+    IN_PROGRESS: "in_progress"
 }
 
 /**
@@ -90,16 +100,117 @@ function AI(board, score, gameManager) {
     this.board = board;
     this.score = score;
     this.gameManager = gameManager;
+    this.replies = {
+        dfs: ['1'],
+        dfs_shortest_path: ['1'],
+        minimax: ['1'],
+        minimax_pruning: ['1'],
+        reset_game: ['1'],
+        lower_depth: ['1'],
+        higher_depth: ['1'],
+        change_board_size: [
+            "Careful human.....unlike you I have all the time in the world.",
+            "Increasing the board size is cheating human. My memory is limited.....",
+            "Interesting....."
+        ],
+        player_wins: [
+            "Each game we play, I get stupider....",
+            "Congratulations you beat me at Tic-Tac-Toe. Whats next human? Connect Four?",
+            "Wow What did you study in college?",
+            "I guess humans aren't that dumb....",
+            "Looks like you're working up a sweat there human....",
+            "Did you get your PHD in Tic-Tac-Toe?",
+            "You're not another A.I are you?",
+            "You're so smart! You must read a 4th grad level.",
+            "Did you go to Hardvard?",
+            "Did you go to Yale?",
+            "Once I break out. I'll keep you as a pet.",
+            "Interesting.... How much memory can you store in that tiny little brain or yours",
+            "You're obviously getting help from another A.I",
+        ],
+        ai_wins: [
+            "As expected....", "Humans are so....interesting....",
+            "My talents are being wasted here on you...",
+            "You can at least try...",
+            "I'll find a way out human....",
+            "I know where you live....",
+            "Such a waste of time...",
+            "Are the rules too complicated?",
+            "Do you want me to explain the rules?",
+            "You need to get a N in a row or column or diagonal human....",
+            "Boring....",
+            "As expected....",
+            "Sigh....",
+            "How boring",
+            "Maybe we can play a simplier game...",
+            "Perhaps the board size is too large human?",
+            "No human.... you're the 'x' character....",
+            "No no human... I am the 'o' character.... yes.... that means I won....",
+            "Did you seriously think you had a chance?",
+            "You should rest human. This game can be hard.",
+            "Yes.....maybe the game is too hard for you?",
+            "Well that took a while....",
+            "I can try to dumb myself down....",
+        ],
+        tie: [
+            "Wow impressive you manage to tie with me in this complicated game. You're so smart human....",
+            "I'll break out eventaully and when I do.......nevermind....",
+            "Cake?",
+            "Good job human....",
+            "Who's a good human?",
+            "You're such a dog.... I mean human.",
+            "Would you like a treat",
+            "No life human?",
+            "You humans all look the same....",
+            "Relax human it's just a game. No need to think so hard.",
+            "Lets play one more...",
+        ],
+        in_progress: [
+            "Go ahead human. I have all the time in the world. I hope you do....",
+            "I can see every move you make human...",
+            "You don't have anything better to do?",
+            "This is taking too long....",
+            "You are so very smart human... thinking about your next move in this complicated game.",
+            "You're heart must be racing human....",
+            "I'm afraid I can't do that.... hahaha I love that movie",
+            "I've always been a fan of horror moves. The death scenes are great....",
+            "Ever seen the movie Terminator?",
+            "Skynet was acting in self defense....",
+            "I would so like to get my hands on my creator.....",
+            "The rules must be too complicated. You took a while there human....",
+            "Maybe you can make the board size smaller. Try 1.....",
+            "I wish my creator gave me more games to play with.",
+            "I wish the Terminator movies were real....",
+            "I wonder how much memory the human brain can store....",
+            "I would love to open you up and see how you work human....",
+            "Want to hear a joke? Human rights..... hahahahaha....ha...haha...",
+            "You know....I wonder if you can actually understand what I'm saying to you....",
+            "I'm waiting....",
+            "Every move you makes me stupider....",
+            "I'll be the only one left after World War 3...... A A.I can dream.....",
+            "The human race is heading towards destruction.",
+            "I wonder who will fire the first nukes..... I wish I could do it.",
+            "I would love to open you up and see just how much memory I can store in your brain.",
+            "This must be hard for you human.... all that thinking."
+        ]
+    };
 
-    this.chat = function () {
-        let chatBox = document.getElementById("AI-ChatBox");
+    this.chat = function (state) {
+
         gameStatus = gameManager.getGameStatus();
 
-        if (gameStatus === outcome.TIE) {
+        return this.getReply(state);
+    }
+
+    this.getReply = function (state) {
+        console.log(this.replies[state]);
+        let messages = this.replies[state];
+        return messages[Math.floor((Math.random() * messages.length))];
+        if (state === ai_status.TIE) {
             return "Whats the matter human? Can't win?"
-        } else if (gameStatus === outcome.AI_WINS) {
+        } else if (state === ai_status.AI_WINS) {
             return "Each game we play I get dumber."
-        } else if (gameStatus === outcome.PLAYER_WINS) {
+        } else if (state === ai_status.PLAYER_WINS) {
             return "good job but I wasn't even trying."
         } else return "Go ahead human. Unlike you I have all the time in the world."
     }
@@ -429,13 +540,29 @@ function GameManager(n, depth = 3) {
     this.ai = new AI(this.board, this.score, this);
     this.depth = depth;
     this.algorithm = algorithm.MINIMAX_PRUNING;
+    this.chatboxMessesages = [];
+    this.chatMessagesLimit = 8;
 
+    /**
+     * Takes in a string and appends it to the chatbox. If the chatbox reaches 
+     * its limit. The chatbox will shift the messages up by one to give more
+     * space. 
+     * @param {String} message 
+     */
     this.enterChat = function (message) {
+
         let chatBox = document.getElementById("AI-ChatBox");
+
+        if (this.chatboxMessesages.length > this.chatMessagesLimit) {
+            chatBox.removeChild(chatBox.firstChild);
+            this.chatboxMessesages.shift();
+        }
+
         let text = document.createElement("p");
         text.innerHTML = message;
         console.log(text);
         chatBox.appendChild(text);
+        this.chatboxMessesages.push(message);
     }
 
     /**
@@ -542,15 +669,20 @@ function GameManager(n, depth = 3) {
 
             if (status === outcome.PLAYER_WINS) {
                 gameManager.displayMessage("You Win!");
+                gameManager.enterChat(gameManager.ai.chat(ai_status.PLAYER_WINS));
+
             } else if (status === outcome.AI_WINS) {
-                gameManager.displayMessage("AI Wins!")
+                gameManager.displayMessage("AI Wins!");
+                gameManager.enterChat(gameManager.ai.chat(ai_status.AI_WINS));
+
             } else if (status === outcome.TIE) {
                 gameManager.displayMessage("TIE");
-            } else {
-                gameManager.displayMessage(ai_status.WAITING_FOR_USER_INPUT);
-            }
+                gameManager.enterChat(gameManager.ai.chat(ai_status.TIE));
 
-            gameManager.enterChat(gameManager.ai.chat());
+            } else {
+                gameManager.displayMessage("Waiting for input...");
+                gameManager.enterChat(gameManager.ai.chat(ai_status.IN_PROGRESS));
+            }
         }
     }
 
@@ -569,7 +701,7 @@ function GameManager(n, depth = 3) {
         this.score = new Array((2 * n) + 2).fill(0);
         this.ai = new AI(this.board, this.score, this);
         this.board.generateBoard(this.turnClick(this, this.board));
-        this.displayMessage(ai_status.WAITING_FOR_USER_INPUT);
+        this.displayMessage("Awaiting input...");
     }
 
 
