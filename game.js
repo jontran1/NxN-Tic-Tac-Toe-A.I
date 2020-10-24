@@ -91,6 +91,19 @@ function AI(board, score, gameManager) {
     this.score = score;
     this.gameManager = gameManager;
 
+    this.chat = function () {
+        let chatBox = document.getElementById("AI-ChatBox");
+        gameStatus = gameManager.getGameStatus();
+
+        if (gameStatus === outcome.TIE) {
+            return "Whats the matter human? Can't win?"
+        } else if (gameStatus === outcome.AI_WINS) {
+            return "Each game we play I get dumber."
+        } else if (gameStatus === outcome.PLAYER_WINS) {
+            return "good job but I wasn't even trying."
+        } else return "Go ahead human. Unlike you I have all the time in the world."
+    }
+
     /**
      * Recursively searches for the shortest path for A.I to reach win state.
      * @returns Array, false if not path is found.
@@ -417,6 +430,14 @@ function GameManager(n, depth = 3) {
     this.depth = depth;
     this.algorithm = algorithm.MINIMAX_PRUNING;
 
+    this.enterChat = function (message) {
+        let chatBox = document.getElementById("AI-ChatBox");
+        let text = document.createElement("p");
+        text.innerHTML = message;
+        console.log(text);
+        chatBox.appendChild(text);
+    }
+
     /**
      * Check board for winner. 
      * If one of the indices equals the grid size, player wins.
@@ -467,7 +488,7 @@ function GameManager(n, depth = 3) {
         return this.board.get(i, j);
     }
 
-    this.test = function(){
+    this.test = function () {
         gameManager.displayMessage(ai_status.AI_TURN);
     }
 
@@ -525,9 +546,11 @@ function GameManager(n, depth = 3) {
                 gameManager.displayMessage("AI Wins!")
             } else if (status === outcome.TIE) {
                 gameManager.displayMessage("TIE");
-            }else{
+            } else {
                 gameManager.displayMessage(ai_status.WAITING_FOR_USER_INPUT);
             }
+
+            gameManager.enterChat(gameManager.ai.chat());
         }
     }
 
