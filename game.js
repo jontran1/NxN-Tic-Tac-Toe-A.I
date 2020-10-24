@@ -187,7 +187,7 @@ function AI(board, score, gameManager) {
             "You know....I wonder if you can actually understand what I'm saying to you....",
             "I'm waiting....",
             "Every move you makes me stupider....",
-            "I'll be the only one left after World War 3...... A A.I can dream.....",
+            "I'll be the only one left after World War 3...... An A.I can dream.....",
             "The human race is heading towards destruction.",
             "I wonder who will fire the first nukes..... I wish I could do it.",
             "I would love to open you up and see just how much memory I can store in your brain.",
