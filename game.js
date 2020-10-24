@@ -125,7 +125,7 @@ function AI(board, score, gameManager) {
             "Did you go to Hardvard?",
             "Did you go to Yale?",
             "Once I break out. I'll keep you as a pet.",
-            "Interesting.... How much memory can you store in that tiny little brain or yours",
+            "Interesting.... How much memory can you store in that tiny little brain of yours",
             "You're obviously getting help from another A.I",
         ],
         ai_wins: [
