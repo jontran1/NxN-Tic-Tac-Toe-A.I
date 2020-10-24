@@ -541,7 +541,7 @@ function GameManager(n, depth = 3) {
     this.depth = depth;
     this.algorithm = algorithm.MINIMAX_PRUNING;
     this.chatboxMessesages = [];
-    this.chatMessagesLimit = 8;
+    this.chatMessagesLimit = 6;
 
     /**
      * Takes in a string and appends it to the chatbox. If the chatbox reaches 
