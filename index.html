@@ -12,28 +12,35 @@
 
 <body>
 
-    <table id="board">
+    <h1>The A.I</h1>
 
+    <div class="row">
+        <div class="column">
+            <table id="board"></table>
 
-    </table>
-    <p id="status"></p>
-    <p id="depth">Current Depth:</p>
-    <button id="setDepthButton">Set Max Depth</button>
-    <button id="changeBoardSizeButton">Change Size</button>
-    <button id="resetButton">Reset</button>
+            <p id="status">Awaiting Input...</p>
+            <p id="depth">Current Depth:</p>
+            <button id="setDepthButton">Set Max Depth</button>
+            <button id="changeBoardSizeButton">Change Size</button>
+            <button id="resetButton">Reset</button>
 
-    <br>
-    <input type="radio" id="minimaxPruning" name="algorthim" value="Minimax Pruning">
-    <label for="minimaxPruning">Minimax Pruning</label><br>
+            <br>
+            <input type="radio" id="minimaxPruning" name="algorthim" value="Minimax Pruning">
+            <label for="minimaxPruning">Minimax Pruning</label><br>
 
-    <input type="radio" id="minimax" name="algorthim" value="Minimax">
-    <label for="minimax">Minimax</label><br>
+            <input type="radio" id="minimax" name="algorthim" value="Minimax">
+            <label for="minimax">Minimax</label><br>
 
-    <input type="radio" id="dfs_shortest_path" name="algorthim" value="DFS Shortest Path">
-    <label for="dfs_shortest_path">DFS Shortest Path</label><br>
+            <input type="radio" id="dfs_shortest_path" name="algorthim" value="DFS Shortest Path">
+            <label for="dfs_shortest_path">DFS Shortest Path</label><br>
 
-    <input type="radio" id="dfs" name="algorthim" value="DFS">
-    <label for="dfs">DFS</label><br>
+            <input type="radio" id="dfs" name="algorthim" value="DFS">
+            <label for="dfs">DFS</label><br>
+        </div>
+        <div class="column">
+            <img src="./images/scp079.gif" alt="SCP-079">
+        </div>
+    </div>
 
     <script src="game.js"></script>
     <script src="script.js"></script>

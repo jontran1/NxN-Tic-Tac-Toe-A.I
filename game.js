@@ -11,6 +11,11 @@ const algorithm = {
     MINIMAX_PRUNING: "minimax_pruning"
 }
 
+const ai_status = {
+    WAITING_FOR_USER_INPUT: "Awaiting Input...",
+    AI_TURN: "Calculating...",
+}
+
 /**
  * 
  * @param {Integer} n 
@@ -462,6 +467,10 @@ function GameManager(n, depth = 3) {
         return this.board.get(i, j);
     }
 
+    this.test = function(){
+        gameManager.displayMessage(ai_status.AI_TURN);
+    }
+
     /**
      * Activates when the user clicks on the board.
      * Where the main gameplay loop actually happens.
@@ -471,6 +480,7 @@ function GameManager(n, depth = 3) {
     this.turnClick = function (gameManager, board) {
         return function (e) {
             console.log("depth: " + gameManager.depth)
+
             if (gameManager.gameOver) return;
             let cell = e.target;
             if (cell.innerHTML) return;
@@ -515,8 +525,9 @@ function GameManager(n, depth = 3) {
                 gameManager.displayMessage("AI Wins!")
             } else if (status === outcome.TIE) {
                 gameManager.displayMessage("TIE");
+            }else{
+                gameManager.displayMessage(ai_status.WAITING_FOR_USER_INPUT);
             }
-
         }
     }
 
@@ -535,7 +546,7 @@ function GameManager(n, depth = 3) {
         this.score = new Array((2 * n) + 2).fill(0);
         this.ai = new AI(this.board, this.score, this);
         this.board.generateBoard(this.turnClick(this, this.board));
-        this.displayMessage("");
+        this.displayMessage(ai_status.WAITING_FOR_USER_INPUT);
     }
 
 
